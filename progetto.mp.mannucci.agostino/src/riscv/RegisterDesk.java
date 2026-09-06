@@ -12,14 +12,20 @@ public class RegisterDesk {
 		this.numberOfRegisters = numberOfRegisters;
 	}
 
-	public boolean writeRegister(int registerAddress, int registerValue) {
+	public void writeRegister(int registerAddress, int registerValue) throws IllegalRegisterAddressException{
 		boolean success = false;
 		if(registerAddress <= 0 || registerAddress >= numberOfRegisters) {
-			return success;
+			throw new IllegalRegisterAddressException();
 		}
 		registers.put(registerAddress, registerValue);
 		success = true;
-		return success;
+	}
+	
+	public int readRegister(int registerAddress) throws IllegalRegisterAddressException{
+		if(registerAddress < 0 || registerAddress >= numberOfRegisters) {
+			throw new IllegalRegisterAddressException();
+		}
+		return registers.get(registerAddress);
 	}
 
 }
