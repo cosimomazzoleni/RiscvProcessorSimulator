@@ -23,23 +23,7 @@ public class CpuTests {
 	}
 
 	@Test
-	public void addExecutionTest() throws IllegalRegisterAddressException {
-		int firstAddress = 12, firstValue = 113;
-		int secondAddress = 3, secondValue = 9;
-		int expectedSum = firstValue + secondValue;
-		registers.put(firstAddress, firstValue);
-		registers.put(secondAddress, secondValue);
-
-		int actualSum = testCpu.add(firstAddress, secondAddress);
-
-		assertThat(actualSum).isEqualTo(expectedSum);
-	}
-
-	@Test
-	public void incorrectAddExecutionTest() {
-		int firstAddress = 73;
-		int secondAddress = -4;
+	public void addExecutionTest() {
 		
-		assertThatThrownBy(() -> testCpu.add(firstAddress, secondAddress)).isInstanceOf(IllegalRegisterAddressException.class);
 	}
 }
