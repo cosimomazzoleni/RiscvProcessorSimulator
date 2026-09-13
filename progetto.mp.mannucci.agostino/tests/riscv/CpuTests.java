@@ -16,7 +16,7 @@ public class CpuTests {
 	Map<Integer, Integer> registers;
 	int deskSize;
 	
-	Memory ram;
+	RAM ram;
 	Map<Integer, Integer> ramCells;
 	int memorySize;
 
@@ -32,16 +32,30 @@ public class CpuTests {
 	}
 
 	@Test
-	public void decodeAddInstructionTest() throws IllegalRegisterAddressException {
+	public void decodeAddInstructionTest() throws IllegalAddressException, UnknownOpcodeException {
 		int instructionWord = 0x730533; // add x10 x6 x7
 		int firstRegister = 6, secondRegister = 7, destinationRegister = 10;
 		registers.put(firstRegister, 54);
 		registers.put(secondRegister, 33);
 		
-		AddInstruction testAdd = testCpu.instructionDecode(instructionWord);
+		AddInstruction testAdd = (AddInstruction) testCpu.instructionDecode(instructionWord);
 
 		assertThat(testAdd.firstValue).isEqualTo(registers.get(firstRegister));
 		assertThat(testAdd.secondValue).isEqualTo(registers.get(secondRegister));
 		assertThat(testAdd.destinationRegister).isEqualTo(destinationRegister);
+	}
+
+	@Test
+	public void decodeSubInstructionTest() throws IllegalAddressException, UnknownOpcodeException {
+		int instructionWord = 0x40638633; // sub x12 x7 x6
+		int firstRegister = 7, secondRegister = 6, destinationRegister = 12;
+		registers.put(firstRegister, 54);
+		registers.put(secondRegister, 33);
+		
+		SubInstruction testSub = (SubInstruction) testCpu.instructionDecode(instructionWord);
+
+		assertThat(testSub.firstValue).isEqualTo(registers.get(firstRegister));
+		assertThat(testSub.secondValue).isEqualTo(registers.get(secondRegister));
+		assertThat(testSub.destinationRegister).isEqualTo(destinationRegister);
 	}
 }

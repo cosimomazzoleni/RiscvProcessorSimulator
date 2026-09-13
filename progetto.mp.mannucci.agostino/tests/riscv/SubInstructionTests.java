@@ -8,8 +8,8 @@ import java.util.TreeMap;
 
 import org.junit.Test;
 
-public class AddInstructionTests {
-	AddInstruction testAdd;
+public class SubInstructionTests {
+	SubInstruction testSub;
 
 	@Test
 	public void addExecutionTest() {
@@ -17,13 +17,13 @@ public class AddInstructionTests {
 		int secondValue = 73;
 		int destinationRegister = 10;
 
-		testAdd = new AddInstruction(destinationRegister, firstValue, secondValue);	// bruttrissimo, e' solo un riempitivo temporaneo
+		testSub = new SubInstruction(destinationRegister, firstValue, secondValue);
 
-		int expectedResultValue = firstValue + secondValue;
+		int expectedResultValue = firstValue - secondValue;
 
-		testAdd.execute();
+		testSub.execute();
 
-		assertThat(testAdd.resultValue).isEqualTo(expectedResultValue);
+		assertThat(testSub.resultValue).isEqualTo(expectedResultValue);
 	}
 
 	@Test
@@ -36,11 +36,11 @@ public class AddInstructionTests {
 		int secondValue = 3;
 		int valueToWrite = 153;
 
-		testAdd = new AddInstruction(destinationRegister, firstValue, secondValue);
+		testSub = new SubInstruction(destinationRegister, firstValue, secondValue);
 
-		testAdd.resultValue = valueToWrite;
+		testSub.resultValue = valueToWrite;
 
-		testAdd.writeBack(testDesk);
+		testSub.writeBack(testDesk);
 
 		assertThat(testDesk.registers.get(destinationRegister)).isEqualTo(valueToWrite);
 	}
@@ -50,7 +50,7 @@ public class AddInstructionTests {
 		int memorySize = 16;
 		TreeMap<Integer, Integer> cells = new TreeMap<>();
 		RAM ram = new RAM(cells, memorySize);
-		testAdd = new AddInstruction(0, 0, 0);
-		assertThatThrownBy(() -> testAdd.accessMemory(ram)).isInstanceOf(StageNotRequiredException.class);
+		testSub = new SubInstruction(0, 0, 0);
+		assertThatThrownBy(() -> testSub.accessMemory(ram)).isInstanceOf(StageNotRequiredException.class);
 	}
 }

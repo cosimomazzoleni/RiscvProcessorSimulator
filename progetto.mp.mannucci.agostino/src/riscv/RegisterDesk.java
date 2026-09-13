@@ -2,7 +2,7 @@ package riscv;
 
 import java.util.Map;
 
-public class RegisterDesk {
+public class RegisterDesk implements Memory{
 	Map<Integer, Integer> registers;
 	final int numberOfRegisters;
 
@@ -12,18 +12,18 @@ public class RegisterDesk {
 		this.numberOfRegisters = numberOfRegisters;
 	}
 
-	public void writeRegister(int registerAddress, int registerValue) throws IllegalRegisterAddressException{
+	public void write(int registerAddress, int registerValue) throws IllegalAddressException{
 		boolean success = false;
 		if(registerAddress <= 0 || registerAddress >= numberOfRegisters) {
-			throw new IllegalRegisterAddressException();
+			throw new IllegalAddressException();
 		}
 		registers.put(registerAddress, registerValue);
 		success = true;
 	}
 	
-	public int readRegister(int registerAddress) throws IllegalRegisterAddressException{
+	public int read(int registerAddress) throws IllegalAddressException{
 		if(registerAddress < 0 || registerAddress >= numberOfRegisters) {
-			throw new IllegalRegisterAddressException();
+			throw new IllegalAddressException();
 		}
 		return registers.get(registerAddress);
 	}

@@ -21,11 +21,11 @@ public class RegisterDeskTests {
 	}
 
 	@Test
-	public void writeRegisterTest() throws IllegalRegisterAddressException {
+	public void writeRegisterTest() throws IllegalAddressException {
 		int testAddress = 12;
 		int testValue = 105;
 
-		testDesk.writeRegister(testAddress, testValue);
+		testDesk.write(testAddress, testValue);
 
 		assertThat(testDesk.registers.get(testAddress)).isEqualTo(testValue);
 	}
@@ -34,23 +34,23 @@ public class RegisterDeskTests {
 	public void illegalAddressWriteTest() {
 		int testValue = 63;
 
-		assertThatThrownBy(() -> testDesk.writeRegister(0, testValue))
-				.isInstanceOf(IllegalRegisterAddressException.class);
+		assertThatThrownBy(() -> testDesk.write(0, testValue))
+				.isInstanceOf(IllegalAddressException.class);
 		assertThat(testDesk.registers.get(0)).isEqualTo(0);
 
 		int testOverflowAddress = 46;
-		assertThatThrownBy(() -> testDesk.writeRegister(testOverflowAddress, testValue))
-				.isInstanceOf(IllegalRegisterAddressException.class);
+		assertThatThrownBy(() -> testDesk.write(testOverflowAddress, testValue))
+				.isInstanceOf(IllegalAddressException.class);
 	}
 
 	@Test
-	public void readTest() throws IllegalRegisterAddressException {
+	public void readTest() throws IllegalAddressException {
 		int testAddress = 14;
 		int expectedValue = 93;
 
 		testRegisters.put(testAddress, expectedValue);
 
-		int actualValue = testDesk.readRegister(testAddress);
+		int actualValue = testDesk.read(testAddress);
 
 		assertThat(actualValue).isEqualTo(expectedValue);
 	}
@@ -59,10 +59,10 @@ public class RegisterDeskTests {
 	public void illegalAddressReadTest() {
 		int testOverflowAddress = 54;
 
-		assertThatThrownBy(() -> testDesk.readRegister(testOverflowAddress)).isInstanceOf(IllegalRegisterAddressException.class);
+		assertThatThrownBy(() -> testDesk.read(testOverflowAddress)).isInstanceOf(IllegalAddressException.class);
 		
 		int testUnderflowAddress = -17;
 		
-		assertThatThrownBy(() -> testDesk.readRegister(testUnderflowAddress)).isInstanceOf(IllegalRegisterAddressException.class);
+		assertThatThrownBy(() -> testDesk.read(testUnderflowAddress)).isInstanceOf(IllegalAddressException.class);
 	}
 }

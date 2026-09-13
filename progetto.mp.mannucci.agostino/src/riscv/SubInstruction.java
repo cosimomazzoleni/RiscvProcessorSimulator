@@ -1,25 +1,25 @@
 package riscv;
 
-public class AddInstruction implements Instruction {
+public class SubInstruction implements Instruction {
 	final int destinationRegister;
 	final int firstValue;
 	final int secondValue;
 	int resultValue;
 
-	public AddInstruction(int destinationRegister, int firstValue, int secondValue) {
+	public SubInstruction(int destinationRegister, int firstValue, int secondValue) {
+		this.destinationRegister = destinationRegister;
 		this.firstValue = firstValue;
 		this.secondValue = secondValue;
-		this.destinationRegister = destinationRegister;
 	}
 
 	@Override
 	public void execute() {
-		resultValue = firstValue + secondValue;
+		resultValue = firstValue - secondValue;
 	}
 
 	@Override
-	public void writeBack(Memory testDesk) throws IllegalAddressException {
-		testDesk.write(destinationRegister, resultValue);
+	public void writeBack(Memory desk) throws IllegalAddressException {
+		desk.write(destinationRegister, resultValue);
 	}
 
 	@Override
