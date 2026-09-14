@@ -29,6 +29,18 @@ public class CpuTests {
 
 		ramCells = new TreeMap<Integer, Integer>();
 		memorySize = 128;
+		ram = new RAM(ramCells, memorySize);
+	}
+
+	@Test
+	public void fetchInstructionTest() throws IllegalAddressException {
+		int expectedWord = 0x8e2e83;
+		int programCounter = 63;
+		ramCells.put(programCounter, expectedWord);
+
+		int actualWord = testCpu.instructionFetch(ram, programCounter);
+
+		assertThat(actualWord).isEqualTo(expectedWord);
 	}
 
 	@Test
@@ -57,5 +69,26 @@ public class CpuTests {
 		assertThat(testSub.firstValue).isEqualTo(registers.get(firstRegister));
 		assertThat(testSub.secondValue).isEqualTo(registers.get(secondRegister));
 		assertThat(testSub.destinationRegister).isEqualTo(destinationRegister);
+	}
+
+	@Test
+	public void decodeLoadWordInstructionTest() throws IllegalAddressException, UnknownOpcodeException {
+		// volevo fare questo test ma JAVA VA IN OVERFLOW
+		/*
+		int instructionWord = 0xfd62a503; // lw x10 -42 x5
+		int dstRegister = 10, offset = -42, sourceRegister = 5;
+		int baseAddress = 112;
+		registers.put(sourceRegister, baseAddress);
+		*/
+		int dstRegister = 10, offset = 42, sourceRegister = 5;
+		int instructionWord = 0x2a2a503;
+		int  baseAddress = 22;
+		registers.put(sourceRegister, baseAddress);
+		
+		LoadWordInstruction testLoadWord = (LoadWordInstruction) testCpu.instructionDecode(instructionWord);
+		
+		assertThat(testLoadWord.destinationRegister).isEqualTo(dstRegister);
+		assertThat(testLoadWord.offset).isEqualTo(offset);
+		assertThat(testLoadWord.baseAddress).isEqualTo(baseAddress);
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 public class RegisterDesk implements Memory{
 	Map<Integer, Integer> registers;
 	final int numberOfRegisters;
+	final int registerSize = 32;	// per ora lo definisco cosi', ma quando avro' piu' chiaro come montare il tutto lo mettero' nel costruttore
 
 	public RegisterDesk(Map<Integer, Integer> registers, int numberOfRegisters) {
 		this.registers = registers;
@@ -28,4 +29,7 @@ public class RegisterDesk implements Memory{
 		return registers.get(registerAddress);
 	}
 
+	public int getWordSize() {
+		return registerSize;
+	}
 }

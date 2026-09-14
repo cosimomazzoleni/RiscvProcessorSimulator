@@ -1,0 +1,26 @@
+package riscv;
+
+public class LoadWordInstructionCreator extends InstructionCreator {
+	protected final int requiredFun3 = 0x2;
+
+	public LoadWordInstructionCreator() {
+		super(0x3);
+	}
+
+	@Override
+	protected Instruction createConcreteInstruction(int instructionWord, Memory dataMemory)
+			throws IllegalAddressException {
+		int dstRegister = (instructionWord / 0x80) % 0x20;
+		int offset = (instructionWord / 0x100000) % 0x800;
+		int sourceRegister = (instructionWord / 0x8000) % 0x20;
+		return new LoadWordInstruction(dstRegister, offset, dataMemory.read(sourceRegister));
+	}
+
+	@Override
+	protected boolean checkInstructionType(int instructionWord) {
+		boolean opcodeFlag = (super.checkOpcode(instructionWord));
+		boolean fun3Flag = (super.getFun3(instructionWord) == requiredFun3);
+		return opcodeFlag && fun3Flag;
+	}
+
+}

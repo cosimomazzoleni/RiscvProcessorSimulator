@@ -12,7 +12,7 @@ public class AddInstructionTests {
 	AddInstruction testAdd;
 
 	@Test
-	public void addExecutionTest() {
+	public void executionTest() {
 		int firstValue = 12;
 		int secondValue = 73;
 		int destinationRegister = 10;
@@ -27,7 +27,7 @@ public class AddInstructionTests {
 	}
 
 	@Test
-	public void addWriteBackTest() throws IllegalAddressException {
+	public void writeBackTest() throws IllegalAddressException {
 		int numberOfRegisters = 32;
 		Map<Integer, Integer> registers = new HashMap<Integer, Integer>();
 		RegisterDesk testDesk = new RegisterDesk(registers, numberOfRegisters);
@@ -46,7 +46,7 @@ public class AddInstructionTests {
 	}
 
 	@Test
-	public void addAccessMemoryTest() {
+	public void accessMemoryTest() {
 		int memorySize = 16;
 		TreeMap<Integer, Integer> cells = new TreeMap<>();
 		RAM ram = new RAM(cells, memorySize);

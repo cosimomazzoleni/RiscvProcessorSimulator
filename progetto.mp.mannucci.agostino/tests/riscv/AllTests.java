@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({ RegisterDeskTests.class, CpuTests.class, AddInstructionTests.class, InstructionCreatorTest.class, SubInstructionTests.class})
+@SuiteClasses({ RegisterDeskTests.class, CpuTests.class, AddInstructionTests.class, InstructionCreatorTest.class, SubInstructionTests.class, RAMTests.class, LoadWordInstructionTests.class})
 public class AllTests {
 
 }

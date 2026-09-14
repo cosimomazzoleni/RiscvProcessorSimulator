@@ -12,6 +12,7 @@ public class Cpu {
 	private void createSupportedInstructionCreators() {
 		instructionCreatorChain = new AddInstructionCreator();
 		instructionCreatorChain.addCreatorToChain(new SubInstructionCreator());
+		instructionCreatorChain.addCreatorToChain(new LoadWordInstructionCreator());
 	}
 
 	// ha senso mettere dataMemory???
@@ -19,9 +20,8 @@ public class Cpu {
 		int programCounter = startingPoint;
 		int instructionWord;
 		Instruction currentInstruction;
-		// ha senso tenere true nel while???
-		while(true) {
-			instructionWord = instructionFetch(InstructionMemory, startingPoint);	// qua dovrebbe uscire dal ciclo in caso di EndOfProgram
+
+		while((instructionWord = instructionFetch(InstructionMemory, startingPoint)) != 0) {
 			currentInstruction = instructionDecode(instructionWord);
 			currentInstruction.execute();
 			try {
@@ -45,8 +45,6 @@ public class Cpu {
 	
 	public Instruction instructionDecode(int instructionWord) throws IllegalAddressException, UnknownOpcodeException {
 		Instruction newInstruction = instructionCreatorChain.decodeInstructionWord(instructionWord, desk);
-//		QUI DEVO TROVARE IL MODO DI LEGGERE I DATI DAI REGISTRI E DARLI ALL'ISTRUZIONE CREATA
-//		newInstruction.getValues(desk.read(newInstruction.));
 		return newInstruction;
 	}
 }

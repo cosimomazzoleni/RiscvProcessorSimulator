@@ -1,8 +1,11 @@
 package riscv;
 
 public class SubInstructionCreator extends InstructionCreator {
+	private final int fun3 = 0x0;
+	private final int fun7 = 0x20;
+
 	public SubInstructionCreator() {
-		super(0x33, 0x0, 0x20);
+		super(0x33);
 	}
 
 	@Override
@@ -14,6 +17,11 @@ public class SubInstructionCreator extends InstructionCreator {
 		SubInstruction add = new SubInstruction(dst, dataMemory.read(src1), dataMemory.read(src2));
 		
 		return add;
+	}
+
+	@Override
+	protected boolean checkInstructionType(int instructionWord) {
+			return super.checkOpcode(instructionWord) && super.getFun3(instructionWord) == fun3 && super.getFun7(instructionWord) == fun7;
 	}
 
 }
