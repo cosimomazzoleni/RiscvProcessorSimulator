@@ -2,6 +2,7 @@ package riscv;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
@@ -28,7 +29,7 @@ public class CpuTests {
 		testCpu = new Cpu(desk);
 
 		ramCells = new TreeMap<Integer, Integer>();
-		memorySize = 128;
+		memorySize = 256;
 		ram = new RAM(ramCells, memorySize);
 	}
 
@@ -90,5 +91,48 @@ public class CpuTests {
 		assertThat(testLoadWord.destinationRegister).isEqualTo(dstRegister);
 		assertThat(testLoadWord.offset).isEqualTo(offset);
 		assertThat(testLoadWord.baseAddress).isEqualTo(baseAddress);
+	}
+
+	@Test
+	public void decodeStoreWordInstructionTest() throws IllegalAddressException, UnknownOpcodeException {
+		int valueSrcRegister = 15, offset = 3, addressSrcRegister = 30;
+		int instructionWord = 0x00ff21a3;
+		int expectedValue = 34, expectedAddress = 12;
+		registers.put(valueSrcRegister, expectedValue);
+		registers.put(addressSrcRegister, expectedAddress);
+
+		StoreWordInstruction testStoreWord = (StoreWordInstruction) testCpu.instructionDecode(instructionWord);
+
+		assertThat(testStoreWord.valueToWrite).isEqualTo(expectedValue);
+		assertThat(testStoreWord.offset).isEqualTo(offset);
+		assertThat(testStoreWord.baseAddress).isEqualTo(expectedAddress);
+	}
+
+	@Test
+	public void runProgramTest() throws IllegalAddressException, UnknownOpcodeException {
+		int startingPoint = 136;
+		ramCells.put(startingPoint, 0x42283);
+		ramCells.put(startingPoint+1, 0xc4a303);
+	    ramCells.put(startingPoint+2, 0x628533);
+	    ramCells.put(startingPoint+3, 0xa92023);
+	    int firstValue = 61;
+	    int firstBaseAddressRegister = 8;
+	    int firstBaseAddress = 127;
+	    int firstOffset = 0;
+	    ramCells.put(firstBaseAddress+firstOffset, firstValue);
+	    int secondValue = -34;
+	    int secondBaseAddressRegister = 9;
+	    int secondBaseAddress = 221;
+	    int secondOffset = 12;
+	    ramCells.put(secondBaseAddress+secondOffset, secondValue);
+	    int storeAddressRegister = 18;
+	    int storeAddress = 14;
+	    registers.put(firstBaseAddressRegister, firstBaseAddress);
+	    registers.put(secondBaseAddressRegister, secondBaseAddress);
+	    registers.put(storeAddressRegister, storeAddress);
+
+	    testCpu.runProgram(ram, startingPoint, ram);
+
+	    assertThat(ramCells.get(storeAddress)).isEqualTo(firstValue+secondValue);
 	}
 }

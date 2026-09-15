@@ -13,6 +13,7 @@ public class Cpu {
 		instructionCreatorChain = new AddInstructionCreator();
 		instructionCreatorChain.addCreatorToChain(new SubInstructionCreator());
 		instructionCreatorChain.addCreatorToChain(new LoadWordInstructionCreator());
+		instructionCreatorChain.addCreatorToChain(new StoreWordInstructionCreator());
 	}
 
 	// ha senso mettere dataMemory???
@@ -21,7 +22,7 @@ public class Cpu {
 		int instructionWord;
 		Instruction currentInstruction;
 
-		while((instructionWord = instructionFetch(InstructionMemory, startingPoint)) != 0) {
+		while((instructionWord = instructionFetch(InstructionMemory, programCounter)) != 0) {
 			currentInstruction = instructionDecode(instructionWord);
 			currentInstruction.execute();
 			try {
@@ -36,6 +37,7 @@ public class Cpu {
 			} catch (IllegalAddressException registerAccessError) {
 				// qui il sistema deve crashare
 			}
+			programCounter++;
 		}
 	}
 

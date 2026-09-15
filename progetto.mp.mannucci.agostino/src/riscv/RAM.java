@@ -23,8 +23,14 @@ public class RAM implements Memory {
 
 	@Override
 	public int read(int address) throws IllegalAddressException {
+		int readValue;
 		if(address >=0 && address < numberOfCells) {
-			return memoryCells.get(address);
+			try {
+				readValue = memoryCells.get(address);
+			} catch (NullPointerException e) {
+				readValue = 0;
+			}
+			return readValue;
 		}
 		throw new IllegalAddressException();	
 	}

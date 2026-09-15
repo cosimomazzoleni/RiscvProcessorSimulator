@@ -39,18 +39,6 @@ public class LoadWordInstructionTests {
 	}
 
 	@Test
-	public void writeBackTest() throws IllegalAddressException, StageNotRequiredException {
-		int dstRegister = 11, baseAddress = 129, offset = -4;
-		int expectedValue = 228;
-		testLW = new LoadWordInstruction(dstRegister, offset, baseAddress);
-		testLW.readValue = expectedValue;
-
-		testLW.writeBack(testDesk);
-
-		assertThat(testDesk.registers.get(dstRegister)).isEqualTo(expectedValue);
-	}
-
-	@Test
 	public void accessMemoryTest() throws StageNotRequiredException, IllegalAddressException {
 		int dstRegister = 26, baseAddress = 118, offset = -43;
 		int expectedValue = 173;
@@ -61,5 +49,17 @@ public class LoadWordInstructionTests {
 		testLW.accessMemory(testMemory);
 
 		assertThat(testLW.readValue).isEqualTo(expectedValue);
+	}
+	
+	@Test
+	public void writeBackTest() throws IllegalAddressException, StageNotRequiredException {
+		int dstRegister = 11, baseAddress = 129, offset = -4;
+		int expectedValue = 228;
+		testLW = new LoadWordInstruction(dstRegister, offset, baseAddress);
+		testLW.readValue = expectedValue;
+		
+		testLW.writeBack(testDesk);
+		
+		assertThat(testDesk.registers.get(dstRegister)).isEqualTo(expectedValue);
 	}
 }

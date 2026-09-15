@@ -60,10 +60,10 @@ public class InstructionCreatorTest {
 	@Test
 	public void loadCreationTest() throws UnknownOpcodeException, IllegalAddressException {
 		testCreator = new LoadWordInstructionCreator();
+		int instructionWord = 0xd62583;
 		int expectedDestinationRegister = 11;
 		int sourceRegister = 12, offset = 13;
 		int addressValue = 102;
-		int instructionWord = 0xd62583;
 		registers.put(sourceRegister, addressValue);
 
 		LoadWordInstruction loadWordInstruction = (LoadWordInstruction) testCreator.decodeInstructionWord(instructionWord, registerDesk);
@@ -71,5 +71,21 @@ public class InstructionCreatorTest {
 		assertThat(loadWordInstruction.baseAddress).isEqualTo(addressValue);
 		assertThat(loadWordInstruction.offset).isEqualTo(offset);
 		assertThat(loadWordInstruction.destinationRegister).isEqualTo(expectedDestinationRegister);
+	}
+
+	@Test
+	public void storeCreationTest() throws UnknownOpcodeException, IllegalAddressException {
+		testCreator = new StoreWordInstructionCreator();
+		int instructionWord = 0x5ea623;
+		int offset = 12, addressSourceRegister = 29, baseAddressValue = 35;
+		registers.put(addressSourceRegister, baseAddressValue);
+		int expectedSourceValue = 22, valueSourceRegister = 5;
+		registers.put(valueSourceRegister, expectedSourceValue);
+
+		StoreWordInstruction storeWordInstruction = (StoreWordInstruction) testCreator.decodeInstructionWord(instructionWord, registerDesk);
+
+		assertThat(storeWordInstruction.valueToWrite).isEqualTo(expectedSourceValue);
+		assertThat(storeWordInstruction.offset).isEqualTo(offset);
+		assertThat(storeWordInstruction.baseAddress).isEqualTo(baseAddressValue);
 	}
 }
