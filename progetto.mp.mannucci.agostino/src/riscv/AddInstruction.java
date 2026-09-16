@@ -23,8 +23,8 @@ public class AddInstruction implements Instruction {
 	}
 
 	@Override
-	public void accessMemory(Memory toAccess) throws StageNotRequiredException {
-		throw new StageNotRequiredException();
+	public void accessMemory(Memory toAccess) {
+		return;
 	}
 
 	@Override

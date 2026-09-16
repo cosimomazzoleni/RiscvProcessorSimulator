@@ -5,6 +5,7 @@ public abstract class InstructionCreator {
 	protected static final int ADDRESS_REGISTER_MAX_VALUE = 0x20;
 	protected static final int MAX_FUN3_VALUE = 0x8;
 	protected static final int MAX_FUN7_VALUE = 0x80;
+
 	private InstructionCreator nextChainElement;
 	protected final int requiredOpcode;
 
@@ -39,12 +40,10 @@ public abstract class InstructionCreator {
 			throws IllegalAddressException;
 
 	protected final boolean checkOpcode(int instructionWord) {
-		int temp = (instructionWord % OPCODE_MAX_VALUE);
 		return (instructionWord % OPCODE_MAX_VALUE) == requiredOpcode;
 	}
 
 	protected final int getFun3(int instructionWord) {
-		int temp = (instructionWord / (OPCODE_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE)) % MAX_FUN3_VALUE;
 		return instructionWord / (OPCODE_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE) % MAX_FUN3_VALUE;
 	}
 

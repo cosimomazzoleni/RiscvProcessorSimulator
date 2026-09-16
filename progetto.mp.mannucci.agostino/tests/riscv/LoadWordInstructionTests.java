@@ -39,7 +39,7 @@ public class LoadWordInstructionTests {
 	}
 
 	@Test
-	public void accessMemoryTest() throws StageNotRequiredException, IllegalAddressException {
+	public void accessMemoryTest() throws IllegalAddressException {
 		int dstRegister = 26, baseAddress = 118, offset = -43;
 		int expectedValue = 173;
 		testMemory.memoryCells.put(baseAddress + offset, expectedValue);
@@ -52,7 +52,7 @@ public class LoadWordInstructionTests {
 	}
 	
 	@Test
-	public void writeBackTest() throws IllegalAddressException, StageNotRequiredException {
+	public void writeBackTest() throws IllegalAddressException {
 		int dstRegister = 11, baseAddress = 129, offset = -4;
 		int expectedValue = 228;
 		testLW = new LoadWordInstruction(dstRegister, offset, baseAddress);

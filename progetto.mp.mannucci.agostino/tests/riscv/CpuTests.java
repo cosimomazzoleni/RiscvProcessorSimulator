@@ -110,6 +110,7 @@ public class CpuTests {
 
 	@Test
 	public void runProgramTest() throws IllegalAddressException, UnknownOpcodeException {
+		int exit_success = 0;
 		int startingPoint = 136;
 		ramCells.put(startingPoint, 0x42283);
 		ramCells.put(startingPoint+1, 0xc4a303);
@@ -131,8 +132,9 @@ public class CpuTests {
 	    registers.put(secondBaseAddressRegister, secondBaseAddress);
 	    registers.put(storeAddressRegister, storeAddress);
 
-	    testCpu.runProgram(ram, startingPoint, ram);
+	    int exitValue = testCpu.runProgram(ram, startingPoint, ram);
 
+	    assertThat(exitValue).isEqualTo(exit_success);
 	    assertThat(ramCells.get(storeAddress)).isEqualTo(firstValue+secondValue);
 	}
 }

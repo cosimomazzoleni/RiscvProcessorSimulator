@@ -44,13 +44,4 @@ public class AddInstructionTests {
 
 		assertThat(testDesk.registers.get(destinationRegister)).isEqualTo(valueToWrite);
 	}
-
-	@Test
-	public void accessMemoryTest() {
-		int memorySize = 16;
-		TreeMap<Integer, Integer> cells = new TreeMap<>();
-		RAM ram = new RAM(cells, memorySize);
-		testAdd = new AddInstruction(0, 0, 0);
-		assertThatThrownBy(() -> testAdd.accessMemory(ram)).isInstanceOf(StageNotRequiredException.class);
-	}
 }

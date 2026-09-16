@@ -18,13 +18,13 @@ public class StoreWordInstruction implements Instruction{
 	}
 	
 	@Override
-	public void accessMemory(Memory toAccess) throws StageNotRequiredException, IllegalAddressException {
+	public void accessMemory(Memory toAccess) throws IllegalAddressException {
 		toAccess.write(addressToWrite, valueToWrite);
 	}
 
 	@Override
-	public void writeBack(Memory desk) throws IllegalAddressException, StageNotRequiredException {
-		throw new StageNotRequiredException();
+	public void writeBack(Memory desk) throws IllegalAddressException {
+		return;
 	}
 
 	@Override

@@ -19,12 +19,12 @@ public class LoadWordInstruction implements Instruction {
 	}
 
 	@Override
-	public void writeBack(Memory desk) throws IllegalAddressException, StageNotRequiredException {
+	public void writeBack(Memory desk) throws IllegalAddressException {
 		desk.write(destinationRegister, readValue);
 	}
 
 	@Override
-	public void accessMemory(Memory toAccess) throws StageNotRequiredException, IllegalAddressException {
+	public void accessMemory(Memory toAccess) throws IllegalAddressException {
 		readValue = toAccess.read(addressToRead);
 	}
 

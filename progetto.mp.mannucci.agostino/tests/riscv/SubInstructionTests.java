@@ -44,13 +44,4 @@ public class SubInstructionTests {
 
 		assertThat(testDesk.registers.get(destinationRegister)).isEqualTo(valueToWrite);
 	}
-
-	@Test
-	public void addAccessMemoryTest() {
-		int memorySize = 16;
-		TreeMap<Integer, Integer> cells = new TreeMap<>();
-		RAM ram = new RAM(cells, memorySize);
-		testSub = new SubInstruction(0, 0, 0);
-		assertThatThrownBy(() -> testSub.accessMemory(ram)).isInstanceOf(StageNotRequiredException.class);
-	}
 }

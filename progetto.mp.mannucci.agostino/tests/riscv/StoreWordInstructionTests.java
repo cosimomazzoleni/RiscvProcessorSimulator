@@ -39,7 +39,7 @@ public class StoreWordInstructionTests {
 	}
 
 	@Test
-	public void accessMemoryTest() throws StageNotRequiredException, IllegalAddressException {
+	public void accessMemoryTest() throws IllegalAddressException {
 		int sourceValue = -21, offset = 84, baseAddress = 18;
 		int addressToWrite = baseAddress + offset;
 		testSW = new StoreWordInstruction(baseAddress, offset, sourceValue);
@@ -48,13 +48,5 @@ public class StoreWordInstructionTests {
 		testSW.accessMemory(testMemory);
 
 		assertThat(testMemory.memoryCells.get(addressToWrite)).isEqualTo(sourceValue);
-	}
-	
-	@Test
-	public void writeBackTest() {
-		int sourceValue = 42, offset = -4, baseAddress = 38;
-		testSW = new StoreWordInstruction(sourceValue, offset, baseAddress);
-		
-		assertThatThrownBy(() -> testSW.writeBack(testDesk)).isInstanceOf(StageNotRequiredException.class);
 	}
 }

@@ -16,28 +16,26 @@ public class Cpu {
 		instructionCreatorChain.addCreatorToChain(new StoreWordInstructionCreator());
 	}
 
-	public final void runProgram(Memory InstructionMemory, int startingPoint, Memory dataMemory) throws IllegalAddressException, UnknownOpcodeException {
+	// ha molto piu' senso fargli restituire int (come processi in Linux) con EXIT_FAILURE o EXIT_SUCCESS
+	public final int runProgram(Memory InstructionMemory, int startingPoint, Memory dataMemory) {
 		int programCounter = startingPoint;
 		int instructionWord;
 		Instruction currentInstruction;
 
-		while((instructionWord = instructionFetch(InstructionMemory, programCounter)) != 0) {
-			currentInstruction = instructionDecode(instructionWord);
-			currentInstruction.execute();
-			try {
+		try {
+			while((instructionWord = instructionFetch(InstructionMemory, programCounter)) != 0) {
+				currentInstruction = instructionDecode(instructionWord);
+				currentInstruction.execute();
 				currentInstruction.accessMemory(dataMemory);
-			} catch (StageNotRequiredException notStageException) {
-				// teoricamente non e' necessario lanciare questa eccezione
-				// 	potrebbe pero' aiutare nel capire cosa succede nel programma
-			}
-			try {				
 				currentInstruction.writeBack(desk);
-			} catch (StageNotRequiredException notStageException) {
-			} catch (IllegalAddressException registerAccessError) {
-				break;
+				programCounter += currentInstruction.updateProgramCounter();
 			}
-			programCounter += currentInstruction.updateProgramCounter();
+		} catch (UnknownOpcodeException instructionFetchError) {
+			return -1;
+		} catch (IllegalAddressException addressError) {
+			return -2;
 		}
+		return 0;
 	}
 
 	public int instructionFetch(Memory instructionMemory, int startingPoint) throws IllegalAddressException {
