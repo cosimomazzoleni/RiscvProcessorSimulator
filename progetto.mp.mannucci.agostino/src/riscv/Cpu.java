@@ -16,7 +16,6 @@ public class Cpu {
 		instructionCreatorChain.addCreatorToChain(new StoreWordInstructionCreator());
 	}
 
-	// ha senso mettere dataMemory???
 	public final void runProgram(Memory InstructionMemory, int startingPoint, Memory dataMemory) throws IllegalAddressException, UnknownOpcodeException {
 		int programCounter = startingPoint;
 		int instructionWord;
@@ -35,9 +34,9 @@ public class Cpu {
 				currentInstruction.writeBack(desk);
 			} catch (StageNotRequiredException notStageException) {
 			} catch (IllegalAddressException registerAccessError) {
-				// qui il sistema deve crashare
+				break;
 			}
-			programCounter++;
+			programCounter += currentInstruction.updateProgramCounter();
 		}
 	}
 

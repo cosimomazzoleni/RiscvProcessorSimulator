@@ -28,4 +28,8 @@ public class LoadWordInstruction implements Instruction {
 		readValue = toAccess.read(addressToRead);
 	}
 
+	@Override
+	public int updateProgramCounter() {
+		return 1;
+	}
 }

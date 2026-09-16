@@ -27,4 +27,8 @@ public class StoreWordInstruction implements Instruction{
 		throw new StageNotRequiredException();
 	}
 
+	@Override
+	public int updateProgramCounter() {
+		return 1;
+	}
 }

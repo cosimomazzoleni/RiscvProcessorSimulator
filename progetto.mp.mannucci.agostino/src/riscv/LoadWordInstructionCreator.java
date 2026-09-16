@@ -1,10 +1,11 @@
 package riscv;
 
 public class LoadWordInstructionCreator extends InstructionCreator {
-	private final int requiredFun3 = 0x2;
+	private final static int LOAD_OPCODE = 0x3;
+	private final static int LOAD_FUN3 = 0x2;
 
 	public LoadWordInstructionCreator() {
-		super(0x3);
+		super(LOAD_OPCODE);
 	}
 
 	@Override
@@ -18,7 +19,7 @@ public class LoadWordInstructionCreator extends InstructionCreator {
 
 	@Override
 	protected boolean checkInstructionType(int instructionWord) {
-		return super.checkOpcode(instructionWord) && (super.getFun3(instructionWord) == requiredFun3);
+		return super.checkOpcode(instructionWord) && (super.getFun3(instructionWord) == LOAD_FUN3);
 	}
 
 }

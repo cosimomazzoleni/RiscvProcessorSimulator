@@ -26,4 +26,9 @@ public class SubInstruction implements Instruction {
 	public void accessMemory(Memory toAccess) throws StageNotRequiredException {
 		throw new StageNotRequiredException();
 	}
+
+	@Override
+	public int updateProgramCounter() {
+		return 1;
+	}
 }

@@ -1,11 +1,12 @@
 package riscv;
 
 public class AddInstructionCreator extends InstructionCreator {
-	private final int fun3 = 0x0;
-	private final int fun7 = 0x0;
+	private final static int ADD_OPCODE = 0x33;
+	private final static int ADD_FUN3 = 0x0;
+	private final static int ADD_FUN7 = 0x0;
 
 	public AddInstructionCreator() {
-		super(0x33);
+		super(ADD_OPCODE);
 	}
 
 	@Override
@@ -22,6 +23,6 @@ public class AddInstructionCreator extends InstructionCreator {
 
 	@Override
 	protected boolean checkInstructionType(int instructionWord) {
-		return super.checkOpcode(instructionWord) && super.getFun3(instructionWord) == fun3 && super.getFun7(instructionWord) == fun7;
+		return super.checkOpcode(instructionWord) && super.getFun3(instructionWord) == ADD_FUN3 && super.getFun7(instructionWord) == ADD_FUN7;
 	}
 }

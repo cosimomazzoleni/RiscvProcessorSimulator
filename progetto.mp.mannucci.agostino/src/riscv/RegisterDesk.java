@@ -14,19 +14,22 @@ public class RegisterDesk implements Memory{
 	}
 
 	public void write(int registerAddress, int registerValue) throws IllegalAddressException{
-		boolean success = false;
 		if(registerAddress <= 0 || registerAddress >= numberOfRegisters) {
 			throw new IllegalAddressException();
 		}
 		registers.put(registerAddress, registerValue);
-		success = true;
 	}
 	
 	public int read(int registerAddress) throws IllegalAddressException{
-		if(registerAddress < 0 || registerAddress >= numberOfRegisters) {
-			throw new IllegalAddressException();
+		int defaultValue = 0;
+		if(registerAddress >= 0 && registerAddress < numberOfRegisters) {
+			try {
+				return registers.get(registerAddress);				
+			} catch (NullPointerException e) {
+				return defaultValue;
+			}
 		}
-		return registers.get(registerAddress);
+		throw new IllegalAddressException();
 	}
 
 	public int getWordSize() {

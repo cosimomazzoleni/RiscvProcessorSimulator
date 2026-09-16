@@ -1,16 +1,16 @@
 package riscv;
 
 public class StoreWordInstructionCreator extends InstructionCreator {
-	private final static int storeOpcode = 0x23;
-	private final int requiredFun3 = 0x2;
+	private final static int STORE_OPCODE = 0x23;
+	private final static int STORE_FUN3 = 0x2;
 
 	public StoreWordInstructionCreator() {
-		super(storeOpcode);
+		super(STORE_OPCODE);
 	}
 
 	@Override
 	protected boolean checkInstructionType(int instructionWord) {
-		return super.checkOpcode(instructionWord) && (super.getFun3(instructionWord) == requiredFun3);
+		return super.checkOpcode(instructionWord) && (super.getFun3(instructionWord) == STORE_FUN3);
 	}
 
 	@Override
