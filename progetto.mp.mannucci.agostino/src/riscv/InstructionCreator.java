@@ -23,7 +23,7 @@ public abstract class InstructionCreator {
 		return this;
 	}
 
-	public final Instruction decodeInstructionWord(int instructionWord, Memory dataMemory)
+	public final Instruction decodeInstructionWord(Integer instructionWord, Memory dataMemory)
 			throws UnknownOpcodeException, IllegalAddressException {
 		if (this.checkInstructionType(instructionWord)) {
 			return this.createConcreteInstruction(instructionWord, dataMemory);
@@ -34,20 +34,23 @@ public abstract class InstructionCreator {
 		}
 	}
 
-	protected abstract boolean checkInstructionType(int instructionWord);
+	protected abstract boolean checkInstructionType(Integer instructionWord);
 
-	protected abstract Instruction createConcreteInstruction(int instructionWord, Memory dataMemory)
+	protected abstract Instruction createConcreteInstruction(Integer instructionWord, Memory dataMemory)
 			throws IllegalAddressException;
 
 	protected final boolean checkOpcode(int instructionWord) {
-		return (instructionWord % OPCODE_MAX_VALUE) == requiredOpcode;
+		return Integer.compareUnsigned(Integer.remainderUnsigned(instructionWord, OPCODE_MAX_VALUE), requiredOpcode) == 0;
 	}
 
 	protected final int getFun3(int instructionWord) {
-		return instructionWord / (OPCODE_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE) % MAX_FUN3_VALUE;
+		return Integer.remainderUnsigned(
+				Integer.divideUnsigned(instructionWord, (OPCODE_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE)),
+				MAX_FUN3_VALUE);
 	}
 
 	protected final int getFun7(int instructionWord) {
-		return instructionWord / (OPCODE_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE * MAX_FUN3_VALUE) % MAX_FUN7_VALUE;
+		return Integer.remainderUnsigned(Integer.divideUnsigned(instructionWord, (OPCODE_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE
+				* ADDRESS_REGISTER_MAX_VALUE * MAX_FUN3_VALUE)), MAX_FUN7_VALUE);
 	}
 }

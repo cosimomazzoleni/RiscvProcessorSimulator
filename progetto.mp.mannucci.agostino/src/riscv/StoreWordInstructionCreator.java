@@ -9,16 +9,17 @@ public class StoreWordInstructionCreator extends InstructionCreator {
 	}
 
 	@Override
-	protected boolean checkInstructionType(int instructionWord) {
-		return super.checkOpcode(instructionWord) && (super.getFun3(instructionWord) == STORE_FUN3);
+	protected boolean checkInstructionType(Integer instructionWord) {
+		return super.checkOpcode(instructionWord) && ((Integer.compareUnsigned(super.getFun3(instructionWord), STORE_FUN3)) == 0);
 	}
 
 	@Override
-	protected Instruction createConcreteInstruction(int instructionWord, Memory dataMemory)
+	protected Instruction createConcreteInstruction(Integer instructionWord, Memory dataMemory)
 			throws IllegalAddressException {
-		int addressRegister = (instructionWord / 0x8000) % 0x20;
-		int offset = ((instructionWord / 0x2000000) % 0x80) * 0x20 + (instructionWord / 0x80) % 0x20;
-		int valueRegister = (instructionWord / 0x100000) % 0x20;
+		int addressRegister = (instructionWord >> 15) & 0x1f;
+		int offset = ((instructionWord >> 25) << 5) + ((instructionWord >> 7) & 0x1f);
+		int valueRegister = (instructionWord >> 20) & 0x1f;
+
 		return new StoreWordInstruction(dataMemory.read(addressRegister), offset, dataMemory.read(valueRegister));
 	}
 

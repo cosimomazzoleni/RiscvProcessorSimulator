@@ -19,7 +19,7 @@ public class Cpu {
 	// ha molto piu' senso fargli restituire int (come processi in Linux) con EXIT_FAILURE o EXIT_SUCCESS
 	public final int runProgram(Memory InstructionMemory, int startingPoint, Memory dataMemory) {
 		int programCounter = startingPoint;
-		int instructionWord;
+		Integer instructionWord;
 		Instruction currentInstruction;
 
 		try {
@@ -38,11 +38,11 @@ public class Cpu {
 		return 0;
 	}
 
-	public int instructionFetch(Memory instructionMemory, int startingPoint) throws IllegalAddressException {
-		return instructionMemory.read(startingPoint);
+	public Integer instructionFetch(Memory instructionMemory, int startingPoint) throws IllegalAddressException {
+		return Integer.valueOf(instructionMemory.read(startingPoint));
 	}
 	
-	public Instruction instructionDecode(int instructionWord) throws IllegalAddressException, UnknownOpcodeException {
+	public Instruction instructionDecode(Integer instructionWord) throws IllegalAddressException, UnknownOpcodeException {
 		Instruction newInstruction = instructionCreatorChain.decodeInstructionWord(instructionWord, desk);
 		return newInstruction;
 	}

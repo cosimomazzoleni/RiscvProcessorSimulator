@@ -75,16 +75,16 @@ public class CpuTests {
 	@Test
 	public void decodeLoadWordInstructionTest() throws IllegalAddressException, UnknownOpcodeException {
 		// volevo fare questo test ma JAVA VA IN OVERFLOW
-		/*
-		int instructionWord = 0xfd62a503; // lw x10 -42 x5
+		//		non esattamente, semplicemente considera iw negativa e quindi il modulo torna diversamente
+		// int instructionWord = 0xffc42603;
+		Integer instructionWord = Integer.valueOf(0xfd62a503); // lw x10 -42 x5
 		int dstRegister = 10, offset = -42, sourceRegister = 5;
 		int baseAddress = 112;
 		registers.put(sourceRegister, baseAddress);
-		*/
-		int dstRegister = 10, offset = 42, sourceRegister = 5;
-		int instructionWord = 0x2a2a503;
-		int  baseAddress = 22;
-		registers.put(sourceRegister, baseAddress);
+		// NOTA: posso usare unsigned arithmetic tramite la classe Integer
+		int bllb = 0xfd62a503;
+		long superbllb = 0xfd62a503L;
+		System.out.println("Int: " + bllb + "\n" + "Long: " + superbllb);
 		
 		LoadWordInstruction testLoadWord = (LoadWordInstruction) testCpu.instructionDecode(instructionWord);
 		

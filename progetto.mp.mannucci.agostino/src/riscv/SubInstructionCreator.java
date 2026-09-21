@@ -10,10 +10,10 @@ public class SubInstructionCreator extends InstructionCreator {
 	}
 
 	@Override
-	protected Instruction createConcreteInstruction(int instructionWord, Memory dataMemory) throws IllegalAddressException {
-		int dst = (instructionWord / 0x80) % 0x20;
-		int src1 = (instructionWord / 0x8000) % 0x20;
-		int src2 = (instructionWord / 0x100000) % 0x20;
+	protected Instruction createConcreteInstruction(Integer instructionWord, Memory dataMemory) throws IllegalAddressException {
+		int dst = (instructionWord >> 7) & 0x1f;
+		int src1 = (instructionWord >> 15) & 0x1f;
+		int src2 = (instructionWord >> 20) & 0x1f;
 
 		SubInstruction add = new SubInstruction(dst, dataMemory.read(src1), dataMemory.read(src2));
 		
@@ -21,8 +21,8 @@ public class SubInstructionCreator extends InstructionCreator {
 	}
 
 	@Override
-	protected boolean checkInstructionType(int instructionWord) {
-			return super.checkOpcode(instructionWord) && super.getFun3(instructionWord) == SUB_FUN3 && super.getFun7(instructionWord) == SUB_FUN7;
+	protected boolean checkInstructionType(Integer instructionWord) {
+			return super.checkOpcode(instructionWord) && ((Integer.compareUnsigned(super.getFun3(instructionWord), SUB_FUN3)) == 0) && ((Integer.compareUnsigned(super.getFun7(instructionWord), SUB_FUN7)) == 0);
 	}
 
 }
