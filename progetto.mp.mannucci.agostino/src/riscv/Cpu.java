@@ -16,7 +16,6 @@ public class Cpu {
 		instructionCreatorChain.addCreatorToChain(new StoreWordInstructionCreator());
 	}
 
-	// ha molto piu' senso fargli restituire int (come processi in Linux) con EXIT_FAILURE o EXIT_SUCCESS
 	public final int runProgram(Memory InstructionMemory, int startingPoint, Memory dataMemory) {
 		int programCounter = startingPoint;
 		Integer instructionWord;

@@ -11,13 +11,25 @@ public class SubInstructionCreator extends InstructionCreator {
 
 	@Override
 	protected Instruction createConcreteInstruction(Integer instructionWord, Memory dataMemory) throws IllegalAddressException {
-		int dst = (instructionWord >> 7) & 0x1f;
-		int src1 = (instructionWord >> 15) & 0x1f;
-		int src2 = (instructionWord >> 20) & 0x1f;
+		int dst = getDestinationRegister(instructionWord);
+		int src1 = getFirstRegister(instructionWord);
+		int src2 = getSecondRegister(instructionWord);
 
 		SubInstruction add = new SubInstruction(dst, dataMemory.read(src1), dataMemory.read(src2));
 		
 		return add;
+	}
+	
+	private int getDestinationRegister(Integer instructionWord) {
+		return (instructionWord >> 7) & 0x1f;
+	}
+
+	private int getFirstRegister(Integer instructionWord) {
+		return (instructionWord >> 15) & 0x1f;
+	}
+	
+	private int getSecondRegister(Integer instructionWord) {
+		return (instructionWord >> 20) & 0x1f;
 	}
 
 	@Override

@@ -14,11 +14,7 @@ public class LoadWordInstructionCreator extends InstructionCreator {
 		int dstRegister = (instructionWord >> 7) & 0x1f;
 		int offset = (instructionWord >> 20);
 		int sourceRegister = (instructionWord >> 15) & 0x1f;
-		/*
-		int dstRegister = Integer.remainderUnsigned(Integer.divideUnsigned(instructionWord, 0x80), 0x20);
-		int offset = (int) Integer.remainderUnsigned(Integer.divideUnsigned(instructionWord, 0x100000), 0x800);
-		int sourceRegister = Integer.remainderUnsigned(Integer.divideUnsigned(instructionWord, 0x8000), 0x20);
-		*/
+
 		return new LoadWordInstruction(dstRegister, offset, dataMemory.read(sourceRegister));
 	}
 

@@ -74,19 +74,27 @@ public class CpuTests {
 
 	@Test
 	public void decodeLoadWordInstructionTest() throws IllegalAddressException, UnknownOpcodeException {
-		// volevo fare questo test ma JAVA VA IN OVERFLOW
-		//		non esattamente, semplicemente considera iw negativa e quindi il modulo torna diversamente
-		// int instructionWord = 0xffc42603;
-		Integer instructionWord = Integer.valueOf(0xfd62a503); // lw x10 -42 x5
-		int dstRegister = 10, offset = -42, sourceRegister = 5;
-		int baseAddress = 112;
+		// test con offset positivo
+		Integer instructionWord = Integer.valueOf(0x1232703); // lw x10 -42 x5
+		int dstRegister = 14, offset = 18, sourceRegister = 6;
+		int baseAddress = 70;
 		registers.put(sourceRegister, baseAddress);
-		// NOTA: posso usare unsigned arithmetic tramite la classe Integer
-		int bllb = 0xfd62a503;
-		long superbllb = 0xfd62a503L;
-		System.out.println("Int: " + bllb + "\n" + "Long: " + superbllb);
 		
 		LoadWordInstruction testLoadWord = (LoadWordInstruction) testCpu.instructionDecode(instructionWord);
+		
+		assertThat(testLoadWord.destinationRegister).isEqualTo(dstRegister);
+		assertThat(testLoadWord.offset).isEqualTo(offset);
+		assertThat(testLoadWord.baseAddress).isEqualTo(baseAddress);
+
+		// test con offset negativo (instructionWord negativa in complemento a 2)
+		instructionWord = Integer.valueOf(0xfd62a503); // lw x10 -42 x5
+		dstRegister = 10;
+		offset = -42;
+		sourceRegister = 5;
+		baseAddress = 112;
+		registers.put(sourceRegister, baseAddress);
+		
+		testLoadWord = (LoadWordInstruction) testCpu.instructionDecode(instructionWord);
 		
 		assertThat(testLoadWord.destinationRegister).isEqualTo(dstRegister);
 		assertThat(testLoadWord.offset).isEqualTo(offset);
@@ -95,6 +103,7 @@ public class CpuTests {
 
 	@Test
 	public void decodeStoreWordInstructionTest() throws IllegalAddressException, UnknownOpcodeException {
+		// test su store con offset positivo
 		int valueSrcRegister = 15, offset = 3, addressSrcRegister = 30;
 		int instructionWord = 0x00ff21a3;
 		int expectedValue = 34, expectedAddress = 12;
@@ -102,6 +111,22 @@ public class CpuTests {
 		registers.put(addressSrcRegister, expectedAddress);
 
 		StoreWordInstruction testStoreWord = (StoreWordInstruction) testCpu.instructionDecode(instructionWord);
+
+		assertThat(testStoreWord.valueToWrite).isEqualTo(expectedValue);
+		assertThat(testStoreWord.offset).isEqualTo(offset);
+		assertThat(testStoreWord.baseAddress).isEqualTo(expectedAddress);
+
+		// test su store con offset negativo (instructionWord negativa in complemento a 2)
+		instructionWord = 0xfea6aba3;
+		valueSrcRegister = 10;
+		offset = -9;
+		addressSrcRegister = 13;
+		expectedValue = -114;
+		expectedAddress = 64;
+		registers.put(valueSrcRegister, expectedValue);
+		registers.put(addressSrcRegister, expectedAddress);
+
+		testStoreWord = (StoreWordInstruction) testCpu.instructionDecode(instructionWord);
 
 		assertThat(testStoreWord.valueToWrite).isEqualTo(expectedValue);
 		assertThat(testStoreWord.offset).isEqualTo(offset);

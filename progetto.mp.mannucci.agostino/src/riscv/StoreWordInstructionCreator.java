@@ -16,11 +16,22 @@ public class StoreWordInstructionCreator extends InstructionCreator {
 	@Override
 	protected Instruction createConcreteInstruction(Integer instructionWord, Memory dataMemory)
 			throws IllegalAddressException {
-		int addressRegister = (instructionWord >> 15) & 0x1f;
-		int offset = ((instructionWord >> 25) << 5) + ((instructionWord >> 7) & 0x1f);
-		int valueRegister = (instructionWord >> 20) & 0x1f;
+		int addressRegister = getFirstRegister(instructionWord);
+		int offset = getOffset(instructionWord);
+		int valueRegister = getSecondRegister(instructionWord);
 
 		return new StoreWordInstruction(dataMemory.read(addressRegister), offset, dataMemory.read(valueRegister));
 	}
+	
+	private int getFirstRegister(Integer instructionWord) {
+		return (instructionWord >> 15) & 0x1f;
+	}
 
+	private int getOffset(Integer instructionWord) {
+		return ((instructionWord >> 25) << 5) + ((instructionWord >> 7) & 0x1f);
+	}
+	
+	private int getSecondRegister(Integer instructionWord) {
+		return (instructionWord >> 20) & 0x1f;
+	}
 }
