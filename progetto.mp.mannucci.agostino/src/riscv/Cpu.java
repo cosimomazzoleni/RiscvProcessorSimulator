@@ -11,9 +11,9 @@ public class Cpu {
 
 	private void createSupportedInstructionCreators() {
 		instructionCreatorChain = new AddInstructionCreator();
-		instructionCreatorChain.addCreatorToChain(new SubInstructionCreator());
-		instructionCreatorChain.addCreatorToChain(new LoadWordInstructionCreator());
-		instructionCreatorChain.addCreatorToChain(new StoreWordInstructionCreator());
+		instructionCreatorChain.addCreatorToChain(new SubInstructionCreator())
+				.addCreatorToChain(new LoadWordInstructionCreator())
+				.addCreatorToChain(new StoreWordInstructionCreator());
 	}
 
 	public final int runProgram(Memory InstructionMemory, int startingPoint, Memory dataMemory) {
@@ -22,7 +22,7 @@ public class Cpu {
 		Instruction currentInstruction;
 
 		try {
-			while((instructionWord = instructionFetch(InstructionMemory, programCounter)) != 0) {
+			while ((instructionWord = instructionFetch(InstructionMemory, programCounter)) != 0) {
 				currentInstruction = instructionDecode(instructionWord);
 				currentInstruction.execute();
 				currentInstruction.accessMemory(dataMemory);
@@ -40,8 +40,9 @@ public class Cpu {
 	public Integer instructionFetch(Memory instructionMemory, int startingPoint) throws IllegalAddressException {
 		return Integer.valueOf(instructionMemory.read(startingPoint));
 	}
-	
-	public Instruction instructionDecode(Integer instructionWord) throws IllegalAddressException, UnknownOpcodeException {
+
+	public Instruction instructionDecode(Integer instructionWord)
+			throws IllegalAddressException, UnknownOpcodeException {
 		Instruction newInstruction = instructionCreatorChain.decodeInstructionWord(instructionWord, desk);
 		return newInstruction;
 	}

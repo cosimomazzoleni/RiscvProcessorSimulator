@@ -1,6 +1,6 @@
 package riscv;
 
-public class SubInstructionCreator extends InstructionCreator {
+public class SubInstructionCreator extends RTypeInstructionCreator {
 	private final static int SUB_OPCODE = 0x33;
 	private final static int SUB_FUN3 = 0x0;
 	private final static int SUB_FUN7 = 0x20;
@@ -10,31 +10,21 @@ public class SubInstructionCreator extends InstructionCreator {
 	}
 
 	@Override
-	protected Instruction createConcreteInstruction(Integer instructionWord, Memory dataMemory) throws IllegalAddressException {
-		int dst = getDestinationRegister(instructionWord);
-		int src1 = getFirstRegister(instructionWord);
-		int src2 = getSecondRegister(instructionWord);
+	protected Instruction createConcreteInstruction(Integer instructionWord, Memory dataMemory)
+			throws IllegalAddressException {
+		int dst = super.getDestinationRegister(instructionWord);
+		int src1 = super.getFirstRegister(instructionWord);
+		int src2 = super.getSecondRegister(instructionWord);
 
 		SubInstruction add = new SubInstruction(dst, dataMemory.read(src1), dataMemory.read(src2));
-		
-		return add;
-	}
-	
-	private int getDestinationRegister(Integer instructionWord) {
-		return (instructionWord >> 7) & 0x1f;
-	}
 
-	private int getFirstRegister(Integer instructionWord) {
-		return (instructionWord >> 15) & 0x1f;
-	}
-	
-	private int getSecondRegister(Integer instructionWord) {
-		return (instructionWord >> 20) & 0x1f;
+		return add;
 	}
 
 	@Override
 	protected boolean checkInstructionType(Integer instructionWord) {
-			return super.checkOpcode(instructionWord) && ((Integer.compareUnsigned(super.getFun3(instructionWord), SUB_FUN3)) == 0) && ((Integer.compareUnsigned(super.getFun7(instructionWord), SUB_FUN7)) == 0);
+		return super.checkOpcode(instructionWord)
+				&& ((Integer.compareUnsigned(super.getFun3(instructionWord), SUB_FUN3)) == 0)
+				&& ((Integer.compareUnsigned(super.getFun7(instructionWord), SUB_FUN7)) == 0);
 	}
-
 }

@@ -42,15 +42,4 @@ public abstract class InstructionCreator {
 	protected final boolean checkOpcode(int instructionWord) {
 		return Integer.compareUnsigned(Integer.remainderUnsigned(instructionWord, OPCODE_MAX_VALUE), requiredOpcode) == 0;
 	}
-
-	protected final int getFun3(int instructionWord) {
-		return Integer.remainderUnsigned(
-				Integer.divideUnsigned(instructionWord, (OPCODE_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE)),
-				MAX_FUN3_VALUE);
-	}
-
-	protected final int getFun7(int instructionWord) {
-		return Integer.remainderUnsigned(Integer.divideUnsigned(instructionWord, (OPCODE_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE * ADDRESS_REGISTER_MAX_VALUE
-				* ADDRESS_REGISTER_MAX_VALUE * MAX_FUN3_VALUE)), MAX_FUN7_VALUE);
-	}
 }

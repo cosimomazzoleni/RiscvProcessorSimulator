@@ -1,6 +1,6 @@
 package riscv;
 
-public class StoreWordInstructionCreator extends InstructionCreator {
+public class StoreWordInstructionCreator extends STypeInstructionCreator {
 	private final static int STORE_OPCODE = 0x23;
 	private final static int STORE_FUN3 = 0x2;
 
@@ -16,22 +16,10 @@ public class StoreWordInstructionCreator extends InstructionCreator {
 	@Override
 	protected Instruction createConcreteInstruction(Integer instructionWord, Memory dataMemory)
 			throws IllegalAddressException {
-		int addressRegister = getFirstRegister(instructionWord);
-		int offset = getOffset(instructionWord);
-		int valueRegister = getSecondRegister(instructionWord);
+		int addressRegister = super.getFirstRegister(instructionWord);
+		int offset = super.getOffset(instructionWord);
+		int valueRegister = super.getSecondRegister(instructionWord);
 
 		return new StoreWordInstruction(dataMemory.read(addressRegister), offset, dataMemory.read(valueRegister));
-	}
-	
-	private int getFirstRegister(Integer instructionWord) {
-		return (instructionWord >> 15) & 0x1f;
-	}
-
-	private int getOffset(Integer instructionWord) {
-		return ((instructionWord >> 25) << 5) + ((instructionWord >> 7) & 0x1f);
-	}
-	
-	private int getSecondRegister(Integer instructionWord) {
-		return (instructionWord >> 20) & 0x1f;
 	}
 }
