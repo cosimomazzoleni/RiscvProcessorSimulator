@@ -20,16 +20,16 @@ public class LoadWordInstruction implements Instruction {
 
 	@Override
 	public void writeBack(Memory desk) throws IllegalAddressException {
-		desk.write(destinationRegister, readValue);
+		desk.writeWord(destinationRegister, readValue);
 	}
 
 	@Override
 	public void accessMemory(Memory toAccess) throws IllegalAddressException {
-		readValue = toAccess.read(addressToRead);
+		readValue = toAccess.readWord(addressToRead);
 	}
 
 	@Override
-	public int updateProgramCounter() {
-		return 1;
+	public int updateProgramCounter(int programCounter) {
+		return programCounter + Cpu.WORD_SIZE;
 	}
 }

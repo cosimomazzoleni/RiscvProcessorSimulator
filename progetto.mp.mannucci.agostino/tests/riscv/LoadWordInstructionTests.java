@@ -15,7 +15,7 @@ public class LoadWordInstructionTests {
 	RegisterDesk testDesk;
 	
 	int numberOfCells = 128;
-	HashMap<Integer, Integer> cells;
+	HashMap<Integer, Byte> cells;
 	RAM testMemory;
 
 	@Before
@@ -42,7 +42,15 @@ public class LoadWordInstructionTests {
 	public void accessMemoryTest() throws IllegalAddressException {
 		int dstRegister = 26, baseAddress = 118, offset = -43;
 		int expectedValue = 173;
-		testMemory.memoryCells.put(baseAddress + offset, expectedValue);
+		byte firstByte = (byte) (expectedValue & 0xff);
+		byte secondByte = (byte) ((expectedValue >> 8) & 0xff);
+		byte thirdByte = (byte) ((expectedValue >> 16) & 0xff);
+		byte fourthByte = (byte) ((expectedValue >> 24) & 0xff);
+		testMemory.memoryCells.put(baseAddress + offset, firstByte);
+		testMemory.memoryCells.put(baseAddress + offset + 1, secondByte);
+		testMemory.memoryCells.put(baseAddress + offset + 2, thirdByte);
+		testMemory.memoryCells.put(baseAddress + offset + 3, fourthByte);
+
 		testLW = new LoadWordInstruction(dstRegister, offset, baseAddress);
 		testLW.addressToRead = baseAddress + offset;
 

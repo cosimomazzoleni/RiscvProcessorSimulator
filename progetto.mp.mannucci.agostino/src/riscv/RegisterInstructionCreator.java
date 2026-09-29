@@ -1,8 +1,8 @@
 package riscv;
 
-public abstract class RTypeInstructionCreator extends InstructionCreator {
+public abstract class RegisterInstructionCreator extends InstructionCreator {
 
-	protected RTypeInstructionCreator(int instructionOpcode) {
+	protected RegisterInstructionCreator(int instructionOpcode) {
 		super(instructionOpcode);
 	}
 	

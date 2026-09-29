@@ -19,7 +19,7 @@ public class StoreWordInstruction implements Instruction{
 	
 	@Override
 	public void accessMemory(Memory toAccess) throws IllegalAddressException {
-		toAccess.write(addressToWrite, valueToWrite);
+		toAccess.writeWord(addressToWrite, valueToWrite);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class StoreWordInstruction implements Instruction{
 	}
 
 	@Override
-	public int updateProgramCounter() {
-		return 1;
+	public int updateProgramCounter(int programCounter) {
+		return programCounter + Cpu.WORD_SIZE;
 	}
 }

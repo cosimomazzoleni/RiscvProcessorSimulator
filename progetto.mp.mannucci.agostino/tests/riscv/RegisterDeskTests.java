@@ -25,7 +25,7 @@ public class RegisterDeskTests {
 		int testAddress = 12;
 		int testValue = 105;
 
-		testDesk.write(testAddress, testValue);
+		testDesk.writeWord(testAddress, testValue);
 
 		assertThat(testDesk.registers.get(testAddress)).isEqualTo(testValue);
 	}
@@ -34,12 +34,12 @@ public class RegisterDeskTests {
 	public void illegalAddressWriteTest() {
 		int testValue = 63;
 
-		assertThatThrownBy(() -> testDesk.write(0, testValue))
+		assertThatThrownBy(() -> testDesk.writeWord(0, testValue))
 				.isInstanceOf(IllegalAddressException.class);
 		assertThat(testDesk.registers.get(0)).isEqualTo(0);
 
 		int testOverflowAddress = 46;
-		assertThatThrownBy(() -> testDesk.write(testOverflowAddress, testValue))
+		assertThatThrownBy(() -> testDesk.writeWord(testOverflowAddress, testValue))
 				.isInstanceOf(IllegalAddressException.class);
 	}
 
@@ -50,7 +50,7 @@ public class RegisterDeskTests {
 
 		testRegisters.put(testAddress, expectedValue);
 
-		int actualValue = testDesk.read(testAddress);
+		int actualValue = testDesk.readWord(testAddress);
 
 		assertThat(actualValue).isEqualTo(expectedValue);
 	}
@@ -59,10 +59,10 @@ public class RegisterDeskTests {
 	public void illegalAddressReadTest() {
 		int testOverflowAddress = 54;
 
-		assertThatThrownBy(() -> testDesk.read(testOverflowAddress)).isInstanceOf(IllegalAddressException.class);
+		assertThatThrownBy(() -> testDesk.readWord(testOverflowAddress)).isInstanceOf(IllegalAddressException.class);
 		
 		int testUnderflowAddress = -17;
 		
-		assertThatThrownBy(() -> testDesk.read(testUnderflowAddress)).isInstanceOf(IllegalAddressException.class);
+		assertThatThrownBy(() -> testDesk.readWord(testUnderflowAddress)).isInstanceOf(IllegalAddressException.class);
 	}
 }

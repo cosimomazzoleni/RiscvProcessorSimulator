@@ -19,7 +19,7 @@ public class SubInstruction implements Instruction {
 
 	@Override
 	public void writeBack(Memory desk) throws IllegalAddressException {
-		desk.write(destinationRegister, resultValue);
+		desk.writeWord(destinationRegister, resultValue);
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class SubInstruction implements Instruction {
 	}
 
 	@Override
-	public int updateProgramCounter() {
-		return 1;
+	public int updateProgramCounter(int programCounter) {
+		return programCounter + Cpu.WORD_SIZE;
 	}
 }

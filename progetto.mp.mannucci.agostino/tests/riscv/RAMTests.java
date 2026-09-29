@@ -8,7 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class RAMTests {
-	HashMap<Integer, Integer> memoryCells;
+	HashMap<Integer, Byte> memoryCells;
 	int memorySize;
 	RAM ramMemory;
 
@@ -21,11 +21,18 @@ public class RAMTests {
 
 	@Test
 	public void readTest() throws IllegalAddressException {
-		int expectedValue = -53;
 		int cellToRead = 233;
-		memoryCells.put(cellToRead, expectedValue);
+		int expectedValue = -5263;
+		byte firstByte = (byte) (expectedValue & 0xff);
+		byte secondByte = (byte) ((expectedValue >> 8) & 0xff);
+		byte thirdByte = (byte) ((expectedValue >> 16) & 0xff);
+		byte fourthByte = (byte) ((expectedValue >> 24) & 0xff);
+		memoryCells.put(cellToRead, firstByte);
+		memoryCells.put(cellToRead+1, secondByte);
+		memoryCells.put(cellToRead+2, thirdByte);
+		memoryCells.put(cellToRead+3, fourthByte);
 
-		int actualValue = ramMemory.read(cellToRead);
+		int actualValue = ramMemory.readWord(cellToRead);
 
 		assertThat(actualValue).isEqualTo(expectedValue);
 	}
@@ -35,8 +42,8 @@ public class RAMTests {
 		int underflowAddress = -32;
 		int overflowAddress = 2847;
 
-		assertThatThrownBy(() -> ramMemory.read(underflowAddress)).isInstanceOf(IllegalAddressException.class);
-		assertThatThrownBy(() -> ramMemory.read(overflowAddress)).isInstanceOf(IllegalAddressException.class);
+		assertThatThrownBy(() -> ramMemory.readWord(underflowAddress)).isInstanceOf(IllegalAddressException.class);
+		assertThatThrownBy(() -> ramMemory.readWord(overflowAddress)).isInstanceOf(IllegalAddressException.class);
 	}
 
 	@Test
@@ -44,9 +51,12 @@ public class RAMTests {
 		int expectedValue = 45;
 		int cellToWrite = 74;
 
-		ramMemory.write(cellToWrite, expectedValue);
+		ramMemory.writeWord(cellToWrite, expectedValue);
 
-		assertThat(memoryCells.get(cellToWrite)).isEqualTo(expectedValue);
+		assertThat(memoryCells.get(cellToWrite)).isEqualTo((byte) (expectedValue & 0xff));
+		assertThat(memoryCells.get(cellToWrite+1)).isEqualTo((byte) ((expectedValue >> 8) & 0xff));
+		assertThat(memoryCells.get(cellToWrite+2)).isEqualTo((byte) ((expectedValue >> 16) & 0xff));
+		assertThat(memoryCells.get(cellToWrite+3)).isEqualTo((byte) ((expectedValue >> 24) & 0xff));
 	}
 
 	@Test
@@ -55,7 +65,7 @@ public class RAMTests {
 		int overflowAddress = 256;
 		int valueToWrite = 64;
 
-		assertThatThrownBy(() -> ramMemory.write(underflowAddress, valueToWrite)).isInstanceOf(IllegalAddressException.class);
-		assertThatThrownBy(() -> ramMemory.write(overflowAddress, valueToWrite)).isInstanceOf(IllegalAddressException.class);
+		assertThatThrownBy(() -> ramMemory.writeWord(underflowAddress, valueToWrite)).isInstanceOf(IllegalAddressException.class);
+		assertThatThrownBy(() -> ramMemory.writeWord(overflowAddress, valueToWrite)).isInstanceOf(IllegalAddressException.class);
 	}
 }

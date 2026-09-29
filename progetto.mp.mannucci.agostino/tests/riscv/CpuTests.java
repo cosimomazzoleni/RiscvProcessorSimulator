@@ -18,7 +18,7 @@ public class CpuTests {
 	int deskSize;
 	
 	RAM ram;
-	Map<Integer, Integer> ramCells;
+	Map<Integer, Byte> ramCells;
 	int memorySize;
 
 	@Before
@@ -28,16 +28,23 @@ public class CpuTests {
 		desk = new RegisterDesk(registers, deskSize);
 		testCpu = new Cpu(desk);
 
-		ramCells = new TreeMap<Integer, Integer>();
+		ramCells = new TreeMap<Integer, Byte>();
 		memorySize = 256;
 		ram = new RAM(ramCells, memorySize);
 	}
 
 	@Test
 	public void fetchInstructionTest() throws IllegalAddressException {
-		int expectedWord = 0x8e2e83;
 		int programCounter = 63;
-		ramCells.put(programCounter, expectedWord);
+		int expectedWord = 0x8e2e83;
+		byte firstByte = (byte) (expectedWord & 0xff);
+		byte secondByte = (byte) ((expectedWord >> 8) & 0xff);
+		byte thirdByte = (byte) ((expectedWord >> 16) & 0xff);
+		byte fourthByte = (byte) ((expectedWord >> 24) & 0xff);
+		ramCells.put(programCounter, firstByte);
+		ramCells.put(programCounter + 1, secondByte);
+		ramCells.put(programCounter + 2, thirdByte);
+		ramCells.put(programCounter + 3, fourthByte);	
 
 		int actualWord = testCpu.instructionFetch(ram, programCounter);
 
@@ -137,29 +144,51 @@ public class CpuTests {
 	public void runProgramTest() throws IllegalAddressException, UnknownOpcodeException {
 		int exit_success = 0;
 		int startingPoint = 136;
-		ramCells.put(startingPoint, 0x42283);
-		ramCells.put(startingPoint+1, 0xc4a303);
-	    ramCells.put(startingPoint+2, 0x628533);
-	    ramCells.put(startingPoint+3, 0xa92023);
+		ramCells.put(startingPoint, (byte) 0x83);
+		ramCells.put(startingPoint+1, (byte) 0x22);
+		ramCells.put(startingPoint+2, (byte) 0x4);
+		ramCells.put(startingPoint+3, (byte) 0x0);
+		ramCells.put(startingPoint+4, (byte) 0x03);
+		ramCells.put(startingPoint+5, (byte) 0xa3);
+		ramCells.put(startingPoint+6, (byte) 0xc4);
+		ramCells.put(startingPoint+7, (byte) 0x0);
+		ramCells.put(startingPoint+8, (byte) 0x33);
+		ramCells.put(startingPoint+9, (byte) 0x85);
+		ramCells.put(startingPoint+10, (byte) 0x62);
+		ramCells.put(startingPoint+11, (byte) 0x0);
+		ramCells.put(startingPoint+12, (byte) 0x23);
+		ramCells.put(startingPoint+13, (byte) 0x20);
+		ramCells.put(startingPoint+14, (byte) 0xa9);
+		ramCells.put(startingPoint+15, (byte) 0x0);
 	    int firstValue = 61;
 	    int firstBaseAddressRegister = 8;
 	    int firstBaseAddress = 127;
 	    int firstOffset = 0;
-	    ramCells.put(firstBaseAddress+firstOffset, firstValue);
+	    ramCells.put(firstBaseAddress+firstOffset, (byte) (firstValue & 0xff));
+	    ramCells.put(firstBaseAddress+firstOffset+1, (byte) ((firstValue >> 8) & 0xff));
+	    ramCells.put(firstBaseAddress+firstOffset+2, (byte) ((firstValue >> 16) & 0xff));
+	    ramCells.put(firstBaseAddress+firstOffset+3, (byte) ((firstValue >> 24) & 0xff));
 	    int secondValue = -34;
 	    int secondBaseAddressRegister = 9;
 	    int secondBaseAddress = 221;
 	    int secondOffset = 12;
-	    ramCells.put(secondBaseAddress+secondOffset, secondValue);
+	    ramCells.put(secondBaseAddress+secondOffset, (byte) (secondValue & 0xff));
+	    ramCells.put(secondBaseAddress+secondOffset+1, (byte) ((secondValue >> 8) & 0xff));
+	    ramCells.put(secondBaseAddress+secondOffset+2, (byte) ((secondValue >> 16) & 0xff));
+	    ramCells.put(secondBaseAddress+secondOffset+3, (byte) ((secondValue >> 24) & 0xff));
 	    int storeAddressRegister = 18;
 	    int storeAddress = 14;
 	    registers.put(firstBaseAddressRegister, firstBaseAddress);
 	    registers.put(secondBaseAddressRegister, secondBaseAddress);
 	    registers.put(storeAddressRegister, storeAddress);
+	    int expectedValue = firstValue + secondValue;
 
 	    int exitValue = testCpu.runProgram(ram, startingPoint, ram);
 
 	    assertThat(exitValue).isEqualTo(exit_success);
-	    assertThat(ramCells.get(storeAddress)).isEqualTo(firstValue+secondValue);
+	    assertThat(ramCells.get(storeAddress)).isEqualTo((byte) (expectedValue & 0xff));
+	    assertThat(ramCells.get(storeAddress+1)).isEqualTo((byte) (expectedValue & 0xff00));
+	    assertThat(ramCells.get(storeAddress+2)).isEqualTo((byte) (expectedValue & 0xff0000));
+	    assertThat(ramCells.get(storeAddress+3)).isEqualTo((byte) (expectedValue & 0xff000000));
 	}
 }

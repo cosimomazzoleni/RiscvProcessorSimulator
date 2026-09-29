@@ -13,14 +13,14 @@ public class RegisterDesk implements Memory{
 		this.numberOfRegisters = numberOfRegisters;
 	}
 
-	public void write(int registerAddress, int registerValue) throws IllegalAddressException{
+	public void writeWord(int registerAddress, int registerValue) throws IllegalAddressException{
 		if(registerAddress <= 0 || registerAddress >= numberOfRegisters) {
 			throw new IllegalAddressException();
 		}
 		registers.put(registerAddress, registerValue);
 	}
 	
-	public int read(int registerAddress) throws IllegalAddressException{
+	public int readWord(int registerAddress) throws IllegalAddressException{
 		int defaultValue = 0;
 		if(registerAddress >= 0 && registerAddress < numberOfRegisters) {
 			try {

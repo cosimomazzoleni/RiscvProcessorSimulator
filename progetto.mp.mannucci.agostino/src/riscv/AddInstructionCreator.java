@@ -1,6 +1,6 @@
 package riscv;
 
-public class AddInstructionCreator extends RTypeInstructionCreator {
+public class AddInstructionCreator extends RegisterInstructionCreator {
 	private final static int ADD_OPCODE = 0x33;
 	private final static int ADD_FUN3 = 0x0;
 	private final static int ADD_FUN7 = 0x0;
@@ -17,7 +17,7 @@ public class AddInstructionCreator extends RTypeInstructionCreator {
 		int src1 = super.getFirstRegister(instructionWord);
 		int src2 = super.getSecondRegister(instructionWord);
 
-		AddInstruction add = new AddInstruction(dst, dataMemory.read(src1), dataMemory.read(src2));
+		AddInstruction add = new AddInstruction(dst, dataMemory.readWord(src1), dataMemory.readWord(src2));
 
 		return add;
 	}

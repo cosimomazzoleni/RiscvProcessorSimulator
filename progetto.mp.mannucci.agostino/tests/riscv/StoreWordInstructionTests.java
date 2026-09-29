@@ -15,7 +15,7 @@ public class StoreWordInstructionTests {
 	RegisterDesk testDesk;
 	
 	int numberOfCells = 128;
-	HashMap<Integer, Integer> cells;
+	HashMap<Integer, Byte> cells;
 	RAM testMemory;
 
 	@Before
@@ -47,6 +47,9 @@ public class StoreWordInstructionTests {
 
 		testSW.accessMemory(testMemory);
 
-		assertThat(testMemory.memoryCells.get(addressToWrite)).isEqualTo(sourceValue);
+		assertThat(testMemory.memoryCells.get(addressToWrite)).isEqualTo((byte) (sourceValue & 0xff));
+		assertThat(testMemory.memoryCells.get(addressToWrite+1)).isEqualTo((byte) ((sourceValue >> 8) & 0xff));
+		assertThat(testMemory.memoryCells.get(addressToWrite+2)).isEqualTo((byte) ((sourceValue >> 16) & 0xff));
+		assertThat(testMemory.memoryCells.get(addressToWrite+3)).isEqualTo((byte) ((sourceValue >> 24) & 0xff));
 	}
 }

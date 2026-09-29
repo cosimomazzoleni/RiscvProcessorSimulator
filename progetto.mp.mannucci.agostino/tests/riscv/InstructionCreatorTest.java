@@ -88,4 +88,11 @@ public class InstructionCreatorTest {
 		assertThat(storeWordInstruction.offset).isEqualTo(offset);
 		assertThat(storeWordInstruction.baseAddress).isEqualTo(baseAddressValue);
 	}
+
+	@Test
+	public void branchLessCreationTest() {
+		int instructionWord = 0x61c463;	// blt x3 x6 8
+
+		
+	}
 }

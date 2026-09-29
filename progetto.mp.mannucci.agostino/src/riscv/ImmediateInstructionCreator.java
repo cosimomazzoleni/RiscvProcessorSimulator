@@ -1,8 +1,8 @@
 package riscv;
 
-public abstract class ITypeInstructionCreator extends InstructionCreator{
+public abstract class ImmediateInstructionCreator extends InstructionCreator{
 
-	public ITypeInstructionCreator(int opcode) {
+	public ImmediateInstructionCreator(int opcode) {
 		super(opcode);
 	}
 
