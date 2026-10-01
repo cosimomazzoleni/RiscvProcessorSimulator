@@ -5,11 +5,13 @@ import java.util.Map;
 public class RegisterDesk implements Memory{
 	Map<Integer, Integer> registers;
 	final int numberOfRegisters;
+	private final int registerSize;
 
-	public RegisterDesk(Map<Integer, Integer> registers, int numberOfRegisters) {
+	public RegisterDesk(Map<Integer, Integer> registers, int numberOfRegisters, int registerSize) {
 		this.registers = registers;
 		registers.put(0, 0);
 		this.numberOfRegisters = numberOfRegisters;
+		this.registerSize = registerSize;
 	}
 
 	public void writeWord(int registerAddress, int registerValue) throws IllegalAddressException{
@@ -29,5 +31,9 @@ public class RegisterDesk implements Memory{
 			}
 		}
 		throw new IllegalAddressException();
+	}
+
+	public int getWordSize() {
+		return registerSize;
 	}
 }
